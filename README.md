@@ -20,7 +20,7 @@ The **learning goals** for this project is:
 ## Project Title Lorem ipsum dolor sit amet
 Term: Spring 2019
 
-+ Team #
++ Team #5
 + **Projec title**: + Team members
 	+ Chai, Nyu @nc2774
 	+ Gu, Feichi @feichigu
