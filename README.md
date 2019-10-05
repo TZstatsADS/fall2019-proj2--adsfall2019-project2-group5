@@ -1,24 +1,6 @@
-# Project 2: Shiny App Development Version 2.0
-
-### [Project Description](doc/project2_desc.md)
-
-![screenshot](doc/screenshot2.png)
-
-In this second project of GR5243 Applied Data Science, we develop a version 2.0 of an *Exploratory Data Analysis and Visualization* shiny app on a topic of your choice using [NYC Open Data](https://opendata.cityofnewyork.us/) or U.S. government open data released on the [data.gov](https://data.gov/) website. See [Project 2 Description](doc/project2_desc.md) for more details.  
-
-The **learning goals** for this project is:
-
-- business intelligence for data science
-- study legacy codes and further development
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
-
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
-
-## Project Title Lorem ipsum dolor sit amet
-Term: Spring 2019
+## New York City Street Trees information App
+Term: Fall 2019
+![screenshot](doc/nyc-street-trees.jpg)
 
 + Team #5
 + **Projec title**: + Team members
