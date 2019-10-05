@@ -3,7 +3,8 @@
 
 Term: Fall 2019
 + Team #5
-+ **NYC Tree Information App**: + Team members
++ **NYC Tree Information App**: 
++ Team members:
 	+ Chai, Nyu @nc2774
 	+ Gu, Feichi @feichigu
 	+ Mathew, Jess @jessmathew
