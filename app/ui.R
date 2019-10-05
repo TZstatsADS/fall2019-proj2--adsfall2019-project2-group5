@@ -1,37 +1,12 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
-library(shiny)
-library(leaflet)
-library(data.table)
-library(plotly)
-
-
-
-
-if (!require("choroplethrZip")) {
-    # install.packages("devtools")
-    library(devtools)
-    install_github('arilamstein/choroplethrZip@v1.5.0')}
-
-
-# Define UI for application that draws a histogram
 shinyUI(
 
     div(id = "canvas",
         navbarPage(strong("2015 Street Trees Census",style = "color:green"),
                    theme = "style.css",
-            # 1. INTRO tab
+            # 1. Intro tab
             tabPanel("Introduction",
                 mainPanel(width = 12,
                     h1("Hello World!")
-                                
                                 
                             ),
                 # footer
@@ -42,7 +17,24 @@ shinyUI(
             tabPanel("Map",
                 div(class = "outer",
                     # leaflet map
-                    leafletOutput("map",width = "100%", height = "1000px"))
+                    leafletOutput("map",width = "100%", height = "1000px"),
+                    
+                    # Control Panel
+                    absolutePanel(id = "controls",class = "panel panel-default", 
+                                  fixed = TRUE, draggable = TRUE,
+                                  top = 120, left = 20, right = "auto", bottom = "auto", 
+                                  width = 250, height = "auto",
+                                  selectInput("type", label = "Species of tree:", 
+                                              choices = unique(data$spc)
+                                             ),
+                                  checkboxGroupInput("enable_markers", "Add Markers for:",
+                                                     choices = c("Root Problem","Trunk Problem","Branch Problem"),
+                                                     selected = c("Root Problem","Trunk Problem","Branch Problem")
+                                                     )
+                    ),
+                    # footer
+                    div(class = "footer","Applied Data Science")
+                    
                    
         ),
             # 3. Interesting Findings tab
@@ -53,4 +45,4 @@ shinyUI(
         )
     )
     
-))
+)))
