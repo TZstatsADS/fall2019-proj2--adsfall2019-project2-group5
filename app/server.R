@@ -49,8 +49,10 @@ shinyServer(function(input, output) {
     
     }, ignoreNULL = FALSE)
     observeEvent(input$type,{
+        leafletProxy("map") %>%
+           clearGroup("type")
         leafletProxy("map") %>% 
-            addMarkers(data = spe(),popup=~as.character(zip),icon = list(iconUrl = "icon/tree.png",iconSize=c(15,15)))
+            addMarkers(data = spe(),group = "type",popup=~as.character(zip),icon = list(iconUrl = "icon/tree.png",iconSize=c(15,15)))
     })
     
 })
