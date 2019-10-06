@@ -24,13 +24,17 @@ shinyUI(
                                   fixed = TRUE, draggable = TRUE,
                                   top = 120, left = 20, right = "auto", bottom = "auto", 
                                   width = 250, height = "auto",
+                                  checkboxInput("click_heatmap","Heatmap for number of trees",value = FALSE),
+                                  
+                                  textInput("text",label = h3("Zipcode Input"),value = "Please enter zipcode..."),
+                                  
                                   selectInput("type", label = "Species of tree:", 
                                               choices = unique(data$spc)
                                              ),
                                   checkboxGroupInput("enable_markers", "Add Markers for:",
-                                                     choices = c("Root Problem","Trunk Problem","Branch Problem"),
-                                                     selected = c("Root Problem","Trunk Problem","Branch Problem")
+                                                     choices = c("Root Problem","Trunk Problem","Branch Problem")
                                                      )
+                                  
                     ),
                     # footer
                     div(class = "footer","Applied Data Science")

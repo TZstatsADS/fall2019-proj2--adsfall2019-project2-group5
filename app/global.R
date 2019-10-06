@@ -32,6 +32,16 @@ data = data[order(data$spc),] ## order the spc names
 ## Shapefiles 
 nyc_neighborhoods <- readOGR("NYCNeighborhood.geojson","NYCNeighborhood")
 
+
+# Number of trees
+treeCountsGroupedByZipCode <- tree_data %>% group_by(zipcode) %>% tally()
+treeCountsGroupedByZipCode <- as.data.frame(treeCountsGroupedByZipCode)
+colnames(treeCountsGroupedByZipCode) <- c("ZIPCODE", "value")
+
+pal <- colorNumeric(
+  palette = "Reds",
+  domain = treeCountsGroupedByZipCode$value)
+
 # problem data set
 problem <- tree_data %>% 
   select(c("zipcode","root_stone","root_grate","root_other",
