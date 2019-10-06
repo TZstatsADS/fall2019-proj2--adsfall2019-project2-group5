@@ -9,6 +9,7 @@ data = data[data$zip != 83,]
 e = data$spc[631]
 data = data[data$spc != e,]   ## remove empty values
 data = data[order(data$spc),] ## order the spc names  
+data = data[data$spc != data$spc[1],]
 
 ## part1
 icons = list(iconUrl='tree.png',iconSize=c(15,15))   ## define icon
