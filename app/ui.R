@@ -11,7 +11,7 @@ shinyUI(
                             ),
                 # footer
                 div(class = "footer","Applied Data Science")
-        ),
+            ),
             
             # 2. MAP tab
             tabPanel("Map",
@@ -24,29 +24,58 @@ shinyUI(
                                   fixed = TRUE, draggable = TRUE,
                                   top = 120, left = 20, right = "auto", bottom = "auto", 
                                   width = 250, height = "auto",
-                                  checkboxInput("click_heatmap","Heatmap for number of trees",value = FALSE),
                                   
-                                  textInput("text",label = h3("Zipcode Input"),value = "Please enter zipcode..."),
+                                  #overview of trees coverage of NYC
+                                  h3("Tree Coverage in NYC"),
+                                  checkboxInput("click_heatmap","heat map",value = FALSE),
                                   
+                                  #By Zipcode
+                                  h3("By ZIPCODE"),
+                                  # input the zipcode 
+                                  textInput("text",label = h5("Zipcode Input:"),value = "Please enter zipcode..."),
+                                  # select the species
                                   selectInput("type", label = "Species of tree:", 
                                               choices = unique(data$spc)
                                              ),
+                                  # check the problem
                                   checkboxGroupInput("enable_markers", "Add Markers for:",
                                                      choices = c("Root Problem","Trunk Problem","Branch Problem")
-                                                     )
+                                                     ),
+                                  
+                                  #By Year
+                                  h3("By YEAR"),
+                                  
+                                  # check the year
+                                  checkboxGroupInput("enable_year", "Year for:",
+                                                     choices = c("2015","20xx"),
+                                                     selected = c("2015")
+                                                    )
+                                  ),
+                    
+                    # Output Panel
+                    absolutePanel(id = "controls", class = "panel panel-default", fixed= TRUE, draggable = TRUE,
+                                  top = 120, left = "auto", right = 20, bottom = "auto", width = 320, height = "auto",
+                                  
+                                  #overview of trees coverage of NYC
+                                  h2("Outputs"),
+                                  #By Zipcode
+                                  h3("By ZIPCODE")
+                                 
+                        )              
                                   
                     ),
                     # footer
                     div(class = "footer","Applied Data Science")
                     
                    
-        ),
+             ),
             # 3. Interesting Findings tab
             tabPanel("Interesting Findings"
-        ),
+            ),
             # 4. Data tab
             tabPanel("Data"
+            )
         )
-    )
     
-)))
+    )
+)

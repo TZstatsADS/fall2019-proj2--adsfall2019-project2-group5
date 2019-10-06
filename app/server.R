@@ -19,6 +19,7 @@ shinyServer(function(input, output) {
     observeEvent(input$click_heatmap,{
         if(input$click_heatmap ==TRUE) leafletProxy("map")%>%
             addPolygons(data = nyc_neighborhoods,
+                        popup = ~ntaname,
                         stroke = T, weight=1,
                         fillOpacity = 0.95,
                         color = ~pal(treeCountsGroupedByZipCode$value),
