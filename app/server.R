@@ -16,7 +16,9 @@ shinyServer(function(input, output) {
                         opacity = 1) 
 
         })
+    # checkbox for heatmap
     observeEvent(input$click_heatmap,{
+        # when the box is checked, show the heatmap 
         if(input$click_heatmap ==TRUE) leafletProxy("map")%>%
             addPolygons(data = nyc_neighborhoods,
                         popup = ~ntaname,
@@ -29,7 +31,9 @@ shinyServer(function(input, output) {
                             textsize = "15px",
                             direction = "auto"),
                         group = "number_of_trees")%>%
+            # the legend of color
             addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>% showGroup("number_of_trees")
+        # when the box is unchecked, show the base map
         else{leafletProxy("map") %>% hideGroup("number_of_trees")}
     })
     # species: cannot remove marker for unselected species
