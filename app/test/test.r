@@ -30,8 +30,12 @@ df = data[data$zip==input,]
 nspc = length(unique(df$spc))
 a = aggregate(df$tree_id,list(df$spc),length)
 col = rainbow(nrow(a))
-pie(a[,2],paste(a[,1],round(100 * a[,2] / sum(a[,2]),2),"%"),col=col,
-    main = paste("Total numbers of trees: ",nrow(df)))
+library(plotly)
+plot_ly(labels=a[,1], values=a[,2], type = "pie",
+        marker=list(colors=col)) %>%
+  layout(title = paste("Total numbers of trees: ",nrow(df)),showlegend=F,
+         xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
+         yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
 ## create pie chart of spc propotion in certain area
 
 ## input code for ui part
