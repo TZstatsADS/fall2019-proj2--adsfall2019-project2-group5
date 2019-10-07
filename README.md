@@ -1,8 +1,9 @@
 ## New York City Street Trees information App
 ![screenshot](doc/nyc-street-trees.jpg)
 
-Term: Fall 2019 Team #5
-+ **NYC Tree Information App**: 
++ Term: Fall 2019 Team #5
+
+
 + Team members:
 	+ Chai, Nyu @nc2774
 	+ Gu, Feichi @feichigu
