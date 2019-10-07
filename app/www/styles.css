@@ -76,7 +76,7 @@ div.outer {
     padding: 0 10px 10px 10px;
     cursor: move;
     /* Fade out while not hovering */
-    opacity: 0.5;
+    opacity: 0.6;
     transition: opacity 500ms 1s;
 }
 #controls:hover {
