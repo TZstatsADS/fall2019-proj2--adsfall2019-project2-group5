@@ -15,7 +15,8 @@ Trees are vital. They give us oxygen, store carbon and give life to whole world'
 
 + **Dataset**: 
 The dataset our group used is '2015 Street Tree Census - Tree Data' from open NYC
-(https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35).
+(https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35). 
+This data includes tree species, diameter and perception of health
 
 + **Project summary**:
 In this project,
