@@ -7,9 +7,10 @@ library(broom)
 library(httr)
 library(rgdal)
 library(zipcode)
+library(plotly)
 
 # original data
-tree <- read.csv("tree.csv",header = TRUE)
+load("~/Desktop/fall2019-proj2--adsfall2019-project2-group5-master/app/tree.RData")
 # change the name of latitute and longitute
 colnames(tree)[39:40] <- c("lat","lng")
 # delete the unreasonable zipcde
@@ -23,7 +24,10 @@ tree_data <- tree_data %>% select(c("status","health","spc_common",
                           "brnch_ligh","brnch_shoe","brnch_othe","lat","lng"))
 
 # species data save it as data
-load("~/Google Drive (zz2587@columbia.edu)/Map/tree_data.RData")
+load("~/Desktop/fall2019-proj2--adsfall2019-project2-group5-master/app/tree_data.RData")
+data$health = tree$health
+data$guard = tree$guards
+data$side = tree$sidewalk
 colnames(data)[4:5] = c("lat","lng")
 data = data[data$zip != 83,]
 e = data$spc[631]
@@ -40,11 +44,11 @@ nyc_neighborhoods <- readOGR("NYCNeighborhood.geojson","NYCNeighborhood")
 treeCountsGroupedByZipCode <- tree_data %>% group_by(zipcode) %>% tally()
 treeCountsGroupedByZipCode <- as.data.frame(treeCountsGroupedByZipCode)
 colnames(treeCountsGroupedByZipCode) <- c("ZIPCODE", "value")
-# Heatmap: for coloring
-pal <- colorNumeric(
-  palette = "Reds",
-  domain = treeCountsGroupedByZipCode$value)
 
+
+# find zipcode data that have the lat, log of each zipcode
+data("zipcode")
+tree_zip <- tree_data %>% select(zipcode) %>% mutate(zip = as.character(zipcode))
 
 # problem data set save it as problem
 problem <- tree_data %>% 
@@ -62,9 +66,6 @@ problem <- tree_data %>%
                          ifelse(brnch_shoe =="Yes",1,
                                 ifelse(brnch_othe =="Yes",1,0))))
 
-# find zipcode data that have the lat, log of each zipcode
-data("zipcode")
-
 # problem: root data
 markers_root <- problem %>% filter(root == 1) %>% 
   select(zipcode,lat,lng) %>%
@@ -81,31 +82,20 @@ markers_branch <- problem %>% filter(branch == 1) %>%
   mutate(zip = as.character(zipcode)) %>% 
   group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
 
+# Heatmap: for coloring
+pal <- colorNumeric(
+  palette = "Reds",
+  domain = treeCountsGroupedByZipCode$value)
+pal_root <- colorNumeric(
+  palette = "Blues",
+  domain = markers_root$value)
+pal_branch <- colorNumeric(
+  palette = "Oranges",
+  domain = markers_branch$value)
+pal_trunk <- colorNumeric(
+  palette = "Purples",
+  domain = markers_trunk$value)
 
-#m <- leaflet() %>% 
- # addProviderTiles(providers$CartoDB.Positron) %>% 
-  #setView(-73.983,40.7639,zoom = 13) 
 
-# a simple plot of trees count by region for reference
-#library(devtools)
-
-#if (!require("choroplethrZip")) 
-  #devtools::install_github('arilamstein/choroplethrZip@v1.5.0')
-
-#library(choroplethrZip)
-#zip_choropleth(count_df,
-              # title       = "2015 Street Trees Census",
-              # legend      = "Number of trees",
-              # county_zoom = 36061)
-# trees count by region
-#count_df <- data %>% 
- # filter(zipcode>0) %>% 
- # mutate(region = as.character(zipcode)) %>% 
-# group_by(region) %>% summarise(value = n())
-
-#head(count_df)
-
-#if (!require("choroplethr")) install.packages("choroplethr")
-#if (!require("devtools")) install.packages("devtools")
 
 
