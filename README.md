@@ -12,7 +12,8 @@
 	
 + **Background**:Trees are vital. They give us oxygen, store carbon and give life to whole world's wildlife. People are attracted to live and work in surroundings. Companies benefit from a healthier and happier workforce if there are parks and trees nearby. Therefore, parks and trees would become an more vital component of urban life. People must respect them and protect them for the future.
 
-+ **Dataset**: The dataset we used is '2015 Street Tree Census - Tree Data' from open NYC(https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35).
++ **Dataset**: The dataset our group used is '2015 Street Tree Census - Tree Data' from open NYC
+(https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35).
 
 + **Project summary**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
