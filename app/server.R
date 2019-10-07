@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
                     direction = "auto"),
                   group = "trunk")%>%
       ## the legend of color
-      addLegend(pal = pal_trunk,group = "trunk", values = markers_root$value, opacity = 1) %>% showGroup("trunk")
+      addLegend(pal = pal_trunk,group = "trunk", values = markers_trunk$value, opacity = 1) %>% showGroup("trunk")
     ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("trunk") %>% clearControls()}
   })
