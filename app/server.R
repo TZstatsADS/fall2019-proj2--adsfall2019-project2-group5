@@ -197,7 +197,7 @@ shinyServer(function(input, output) {
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })
   
-  output$table = renderDataTable(tree, options = list(pageLength = 10, lengthMenu = list(c(10))))
+  output$table = renderDataTable(tree_data2, options = list(pageLength = 10, lengthMenu = list(c(10))))
   
   
 })
