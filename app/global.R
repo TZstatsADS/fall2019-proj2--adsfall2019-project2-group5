@@ -22,6 +22,10 @@ tree_data <- tree_data %>% select(c("status","health","spc_common",
                           "boroname","root_stone","root_grate","root_other",
                           "trnk_wire","trnk_light","trnk_other",
                           "brnch_ligh","brnch_shoe","brnch_othe","lat","lng"))
+tree_data2 = tree_data %>% select(c("status","health","spc_common",
+                                    "steward","guards","sidewalk",
+                                    "zipcode","zip_city",
+                                    "boroname","lat","lng"))
 
 # species data save it as data
 load("~/Desktop/fall2019-proj2--adsfall2019-project2-group5-master/app/tree_data.RData")
