@@ -82,17 +82,6 @@ markers_branch <- problem %>% filter(branch == 1) %>%
   group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
 
 
-
-
-## TEST
-type = "honeylocust" 
-text = "10024"
-
-tree_data %>% filter(spc_common == type,zipcode ==text) %>% select(lat,lng) %>%
-  mutate(zip = as.character(zip)) %>% 
-  group_by(zip) %>%  filter(zip == text)%>% left_join(zipcode) %>% select(-c("city","state"))
-
-
 #m <- leaflet() %>% 
  # addProviderTiles(providers$CartoDB.Positron) %>% 
   #setView(-73.983,40.7639,zoom = 13) 

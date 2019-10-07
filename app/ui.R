@@ -1,7 +1,7 @@
 shinyUI(
 
     div(id = "canvas",
-        navbarPage(strong("2015 Street Trees Census",style = "color:green"),
+        navbarPage(strong("Street Trees Census",style = "color:green"),
                    theme = "style.css",
             # 1. Intro tab
             tabPanel("Introduction",
@@ -26,22 +26,26 @@ shinyUI(
                                   width = 250, height = "auto",
                                   
                                   #overview of trees coverage of NYC
-                                  h3("Tree Coverage in NYC"),
+                                  h3("Overview"),
+                                  h5("Tree Coverage:"),
                                   checkboxInput("click_heatmap","heat map",value = FALSE),
-                                  
-                                  #By Zipcode
-                                  h3("By ZIPCODE"),
-                                  # input the zipcode 
-                                  textInput("text",label = h5("Zipcode Input:"),value = "Please enter zipcode..."),
                                   # select the species
                                   selectInput("type", label = "Species of tree:", 
                                               choices = unique(data$spc)
-                                             ),
+                                  ),
                                   # check the problem
-                                  checkboxGroupInput("enable_markers", "Add Markers for:",
+                                  checkboxGroupInput("enable_heatmap", "Add Markers for:",
                                                      choices = c("Root Problem","Trunk Problem","Branch Problem")
-                                                     ),
+                                  ),
                                   
+                                  #By Zipcode
+                                  h3("By ZIPCODE"),
+                                  # input the zipcode
+                                  textInput("text",label = h5("Step 1 Zipcode Input:"),value = "Please enter zipcode..."),
+                                  h5("Pie Charts are shown on the right."),
+                                  checkboxGroupInput("enable_markers", "Step 2 Add Markers for:",
+                                                     choices = c("Root Problem","Trunk Problem","Branch Problem")
+                                  ),
                                   #By Year
                                   h3("By YEAR"),
                                   

@@ -15,9 +15,10 @@ shinyServer(function(input, output) {
                   opacity = 1) 
     
   })
-  # checkbox for heatmap
+  # Overview:
+  ##checkbox for heatmap
   observeEvent(input$click_heatmap,{
-    # when the box is checked, show the heatmap 
+    ## when the box is checked, show the heatmap 
     if(input$click_heatmap ==TRUE) leafletProxy("map")%>%
       addPolygons(data = nyc_neighborhoods,
                   popup = ~ntaname,
@@ -30,45 +31,110 @@ shinyServer(function(input, output) {
                     textsize = "15px",
                     direction = "auto"),
                   group = "number_of_trees")%>%
-      # the legend of color
+      ## the legend of color
       addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>% showGroup("number_of_trees")
-    # when the box is unchecked, show the base map
+    ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("number_of_trees") %>% clearControls()}
-    
   })
-  # species: cannot remove marker for unselected species
+  ## species: 
   spe <- reactive({
     data %>% filter(spc == input$type) %>% select(zip,lat,lng) %>%
       mutate(zip = as.character(zip)) %>% 
       group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
   })
-  # problem:
-  observeEvent(input$enable_markers, {
-    if("Root Problem" %in% input$enable_markers) leafletProxy("map",data = markers_root) %>% 
-      addMarkers(lat = ~latitude,lng = ~longitude,
-                 group ="markers_root",popup = "root problem",
-                 icon = list(iconUrl = "Data/root.png",iconSize=c(15,15)))%>% showGroup("markers_root")
-    else{leafletProxy("map") %>% hideGroup("markers_root")}
-    
-    if("Branch Problem" %in% input$enable_markers) leafletProxy("map",data = markers_branch) %>% 
-      addMarkers(lat = ~latitude,lng = ~longitude,
-                 group ="markers_branch",popup = "branch problem",
-                 icon = list(iconUrl = "Data/branch.png",iconSize=c(15,15)))%>% showGroup("markers_branch")
-    else{leafletProxy("map") %>% hideGroup("markers_branch")}
-    
-    if("Trunk Problem" %in% input$enable_markers) leafletProxy("map",data = markers_trunk) %>% 
-      addMarkers(lat = ~latitude,lng = ~longitude,
-                 group ="markers_trunk",popup = "trunk problem",
-                 icon = list(iconUrl = "Data/trunk.png",iconSize=c(15,15)))%>% showGroup("markers_trunk")
-    
-    else{leafletProxy("map") %>% hideGroup("markers_trunk")}
-    
-  }, ignoreNULL = FALSE)
   observeEvent(input$type,{
     leafletProxy("map") %>%
       clearGroup("type")
     leafletProxy("map") %>% 
-      addMarkers(data = spe(),group = "type",popup=~as.character(zip),icon = list(iconUrl = "Data/tree.png",iconSize=c(15,15)))
+      addMarkers(data = spe(),group = "type",icon = list(iconUrl = "icon/tree.png",iconSize=c(15,15)))
   })
+  
+  ## heatmap for problem: issue of color and controls
+  observeEvent(input$enable_heatmap,{
+    
+    if("Root Problem" %in% input$enable_heatmap) leafletProxy("map")%>%
+      addPolygons(data = nyc_neighborhoods,
+                  popup = ~ntaname,
+                  stroke = T, weight=1,
+                  fillOpacity = 0.95,
+                  color = ~pal(markers_root$value),
+                  highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto"),
+                  group = "root")%>%
+      ## the legend of color
+      addLegend(pal = pal,group = "root", values = markers_root$value, opacity = 1) %>% showGroup("root")
+    ## when the box is unchecked, show the base map
+    else{leafletProxy("map") %>% hideGroup("root") %>% clearControls()}
+    
+    if("Branch Problem" %in% input$enable_heatmap) leafletProxy("map")%>%
+      addPolygons(data = nyc_neighborhoods,
+                  popup = ~ntaname,
+                  stroke = T, weight=1,
+                  fillOpacity = 0.95,
+                  color = ~pal(markers_branch$value),
+                  highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto"),
+                  group = "branch")%>%
+      ## the legend of color
+      addLegend(pal = pal,group = "branch", values = markers_branch$value, opacity = 1) %>% showGroup("branch")
+    ## when the box is unchecked, show the base map
+    else{leafletProxy("map") %>% hideGroup("branch") %>% clearControls()}
+    
+    if("Trunk Problem" %in% input$enable_heatmap) leafletProxy("map")%>%
+      addPolygons(data = nyc_neighborhoods,
+                  popup = ~ntaname,
+                  stroke = T, weight=1,
+                  fillOpacity = 0.95,
+                  color = ~pal(markers_trunk$value),
+                  highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto"),
+                  group = "trunk")%>%
+      ## the legend of color
+      addLegend(pal = pal,group = "trunk", values = markers_root$value, opacity = 1) %>% showGroup("trunk")
+    ## when the box is unchecked, show the base map
+    else{leafletProxy("map") %>% hideGroup("trunk") %>% clearControls()}
+  })
+  
+  
+  #By ZIPCODE:
+  ## problem
+  observeEvent(input$enable_markers, {
+    if("Root Problem" %in% input$enable_markers) leafletProxy("map",
+                                                              data = problem %>% filter(root == 1) %>% 
+                                                                select(zipcode,lat,lng) %>%
+                                                                mutate(zip = as.character(zipcode)) %>% filter(zip==input$text)) %>% 
+      addMarkers(lat = ~lat,lng = ~lng,
+                 group ="markers_root",popup = "root problem",
+                 icon = list(iconUrl = "icon/root.png",iconSize=c(15,15)))%>% showGroup("markers_root")
+    else{leafletProxy("map") %>% hideGroup("markers_root")}
+    
+    if("Branch Problem" %in% input$enable_markers) leafletProxy("map",data = problem %>% filter(branch == 1) %>% 
+                                                                  select(zipcode,lat,lng) %>%
+                                                                  mutate(zip = as.character(zipcode)) %>% filter(zip==input$text)) %>% 
+      addMarkers(lat = ~lat,lng = ~lng,
+                 group ="markers_branch",popup = "branch problem",
+                 icon = list(iconUrl = "icon/branch.png",iconSize=c(15,15)))%>% showGroup("markers_branch")
+    else{leafletProxy("map") %>% hideGroup("markers_branch")}
+    
+    if("Trunk Problem" %in% input$enable_markers) leafletProxy("map",data = problem %>% filter(trunk == 1) %>% 
+                                                                 select(zipcode,lat,lng) %>%
+                                                                 mutate(zip = as.character(zipcode)) %>% filter(zip==input$text)) %>% 
+      addMarkers(lat = ~lat,lng = ~lng,
+                 group ="markers_trunk",popup = "trunk problem",
+                 icon = list(iconUrl = "icon/trunk.png",iconSize=c(15,15)))%>% showGroup("markers_trunk")
+    
+    else{leafletProxy("map") %>% hideGroup("markers_trunk")}
+    
+  }, ignoreNULL = FALSE)
+
   
 })
