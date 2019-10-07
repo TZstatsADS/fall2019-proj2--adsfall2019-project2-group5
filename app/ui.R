@@ -26,31 +26,31 @@ shinyUI(
                                   width = 250, height = "auto",
                                   
                                   #overview of trees coverage of NYC
-                                  h3("Overview"),
+                                  h4("Overview"),
                                   h5("Tree Coverage:"),
                                   checkboxInput("click_heatmap","heat map",value = FALSE),
                                   # select the species
-                                  selectInput("type", label = "Species of tree:", 
-                                              choices = unique(data$spc),selected = NULL
+                                  selectInput("type", label = "Species of tree:",
+                                              choices = unique(data$spc),selected = NULL,multiple = FALSE
                                   ),
                                   # check the problem
                                   radioButtons("enable_heatmap", "Tree problem heatmap:",
                                                      choices = list("Root Problem","Trunk Problem","Branch Problem"),
-                                               selected = NULL
+                                               selected = character(0)
                                   ),
                                   
                                   #By Zipcode
-                                  h3("By ZIPCODE"),
+                                  h4("By ZIPCODE"),
                                   # select the zipcode
                                   selectInput("zipcode", label = "Please select the ZIPCODE :", 
-                                              choices = unique(tree_zip$zip),selected = NULL
+                                              choices = sort(as.numeric(unique(tree_zip$zip))),selected = NULL,multiple = FALSE
                                   ),
                                   h5("Pie Charts are shown on the right."),
                                   checkboxGroupInput("enable_markers", "Step 2 Add Markers for:",
                                                      choices = c("Root Problem","Trunk Problem","Branch Problem")
                                   ),
                                   #By Year
-                                  h3("By YEAR"),
+                                  h4("By YEAR"),
                                   
                                   # check the year
                                   checkboxGroupInput("enable_year", "Year for:",
@@ -63,16 +63,16 @@ shinyUI(
                     absolutePanel(id = "controls", class = "panel panel-default", fixed= TRUE, draggable = TRUE,
                                   top = 120, left = "auto", right = 20, bottom = "auto", width = 320, height = "auto",
                                   #overview of trees coverage of NYC
-                                  h2("Outputs"),
+                                  h3("Outputs"),
                                   #By Zipcode
-                                  h3("By ZIPCODE"),
+                                  h4("By ZIPCODE"),
                                   #By Zipcode
                                   p(textOutput("ziparea")),
                                   p(textOutput("total")),
-                                  plotlyOutput("spc_pie", height="150"),
-                                  plotlyOutput("health_pie",height = "150"),
-                                  plotlyOutput("guard_pie",height = "150"),
-                                  plotlyOutput("sidewalk_pie",height = "150")
+                                  plotlyOutput("spc_pie", height="180"),
+                                  plotlyOutput("health_pie",height = "180"),
+                                  plotlyOutput("guard_pie",height = "180"),
+                                  plotlyOutput("sidewalk_pie",height = "180")
                                  
                     )              
                                   

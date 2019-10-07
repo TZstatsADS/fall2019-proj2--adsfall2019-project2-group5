@@ -158,7 +158,7 @@ shinyServer(function(input, output) {
     a1 = aggregate(df1$tree_id,list(df1$spc),length)
     col1 = rainbow(nrow(a1))
     plot_ly(labels=a1[,1],values=a1[,2], type = "pie",
-            marker=list(colors=col1)) %>%
+            marker=list(colors=col1),textinfo = "none") %>%
       layout(title = paste("Species propotion"),showlegend=F,
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
