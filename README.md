@@ -1,4 +1,4 @@
-## New York City Street Trees information App
+## NYC Street Trees information App
 ![screenshot](doc/nyc-street-trees.jpg)
 
 + Term: Fall 2019 Team #5
