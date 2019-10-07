@@ -17,8 +17,8 @@ Trees are vital. They give us oxygen, store carbon and give life to whole world'
 The dataset our group used is '2015 Street Tree Census - Tree Data' from open NYC
 (https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35). This data includes tree species, diameter and perception of health.
 
-+ **Project summary**:
-In this project,
++ **Project summary** :
+In this project, we want to compare tree's species, status, health, condition, guards types, sidewalk conditions by different zipcode and zip city.
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
 
