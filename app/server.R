@@ -243,5 +243,85 @@ shinyServer(function(input, output) {
   output$table = renderDataTable(tree_data2, options = list(pageLength = 10, lengthMenu = list(c(10))))
   
   
+  # 3. comparison tab
+  output$map1 <- renderLeaflet({
+    # default map, base layer
+    m <- leaflet() %>%
+      addTiles() %>% 
+      addProviderTiles("CartoDB.Positron") %>%
+      setView(-73.983,40.7639,zoom = 10) 
+  })
+  
+  observeEvent({input$enable_regions
+    input$comparison_heatmap},{
+    if("Neighbourhoods" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
+      addPolygons(data = nyc_neighborhoods,
+                  popup = ~ntaname,
+                  stroke = T, weight=1,
+                  fillOpacity = 0.95,
+                  color = ~pal05(tree05CountsGroupedByZipCode$value),
+                  highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto"),
+                  group = "number_of_trees05")%>%
+      addLegend(pal = pal05,group = "number_of_trees05", values = tree05CountsGroupedByZipCode$value, opacity = 1) %>%
+      showGroup("number_of_trees05") 
+    else{leafletProxy("map1") %>% hideGroup("number_of_trees05") %>% clearControls()}
+      
+    if("Neighbourhoods" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
+        addPolygons(data = nyc_neighborhoods,
+                    popup = ~ntaname,
+                    stroke = T, weight=1,
+                    fillOpacity = 0.95,
+                    color = ~pal(treeCountsGroupedByZipCode$value),
+                    highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                    labelOptions = labelOptions(
+                      style = list("font-weight" = "normal", padding = "3px 8px"),
+                      textsize = "15px",
+                      direction = "auto"),
+                    group = "number_of_trees")%>%
+        addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>%
+        showGroup("number_of_trees") 
+      else{leafletProxy("map1") %>% hideGroup("number_of_trees") %>% clearControls()}
+
+      if("Boroughs" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
+        addPolygons(data = nyc_boroughs,
+                    popup = ~boro_name,
+                    stroke = T, weight=1,
+                    fillOpacity = 0.95,
+                    color = ~pal05_boro(tree05CountsGroupedByboroname$value),
+                    highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                    labelOptions = labelOptions(
+                      style = list("font-weight" = "normal", padding = "3px 8px"),
+                      textsize = "15px",
+                      direction = "auto"),
+                    group = "number_of_trees05_boro")%>%
+        addLegend(pal = pal05_boro,group = "number_of_trees05_boro", values = tree05CountsGroupedByboroname$value, opacity = 1) %>%
+        showGroup("number_of_trees05_boro") 
+      else{leafletProxy("map1") %>% hideGroup("number_of_trees05_boro") %>% clearControls()}
+      
+      if("Boroughs" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
+        addPolygons(data = nyc_boroughs,
+                    popup = ~boro_name,
+                    stroke = T, weight=1,
+                    fillOpacity = 0.95,
+                    color = ~pal_boro(treeCountsGroupedByboroname$value),
+                    highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
+                    labelOptions = labelOptions(
+                      style = list("font-weight" = "normal", padding = "3px 8px"),
+                      textsize = "15px",
+                      direction = "auto"),
+                    group = "number_of_trees_boro")%>%
+        addLegend(pal = pal_boro,group = "number_of_trees_boro", values = treeCountsGroupedByboroname$value, opacity = 1) %>%
+        showGroup("number_of_trees_boro") 
+      else{leafletProxy("map1") %>% hideGroup("number_of_trees_boro") %>% clearControls()}
+    
+  })
+     
+  
+
+  
 })
 

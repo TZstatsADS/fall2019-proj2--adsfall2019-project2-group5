@@ -78,7 +78,32 @@ shinyUI(
                                   
                 )
             ),
-            # 3. Data tab
+            # 3. Comparison tab
+            tabPanel("Comparison",
+                     div(class = "outer2",
+                         leafletOutput("map1",width = "100%", height = "1000px"),
+                         absolutePanel(id = "controls",class = "panel panel-default", 
+                                       fixed = TRUE, draggable = TRUE,
+                                       top = 120, left = 20, right = "auto", bottom = "auto", 
+                                       width = 250, height = "auto",
+                                       
+                                       #overview of trees coverage of NYC
+                                       h4("Tree Coverage:"),
+                                       h5("Please select both Regions and Year."),
+                                       radioButtons("enable_regions", "Regions:",
+                                                          choices = c("Neighbourhoods","Boroughs"),
+                                                    selected = character(0)
+                                       ),
+                                       radioButtons("comparison_heatmap", "Year",
+                                                    choices = list("2005","2015"),
+                                                    selected = character(0)
+                                       )
+                                     
+                         )
+                     )       
+              
+            ),
+            # 4. Data tab
             tabPanel("Data",
                      
                      div(width = 12,

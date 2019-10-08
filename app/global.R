@@ -10,7 +10,7 @@ library(zipcode)
 library(plotly)
 
 # original data
-load("~/Desktop/fall2019-proj2--adsfall2019-project2-group5-master/app/tree.RData")
+load("tree.RData")
 # change the name of latitute and longitute
 colnames(tree)[39:40] <- c("lat","lng")
 # delete the unreasonable zipcde
@@ -28,7 +28,7 @@ tree_data2 = tree_data %>% select(c("status","health","spc_common",
                                     "boroname","lat","lng"))
 
 # species data save it as data
-load("~/Desktop/fall2019-proj2--adsfall2019-project2-group5-master/app/tree_data.RData")
+load("tree_data.RData")
 data$health = tree$health
 data$guard = tree$guards
 data$side = tree$sidewalk
@@ -100,6 +100,37 @@ pal_trunk <- colorNumeric(
   palette = "Purples",
   domain = markers_trunk$value)
 
+
+load("tree05.RData")
+tree05_data <- tree05[tree05$zipcode !=0,]
+tree05_data <- tree05_data %>% select(c("spc_common","zipcode","boroname","latitude","longitude"))
+
+tree05CountsGroupedByZipCode <- tree05_data %>% group_by(zipcode) %>% tally()
+tree05CountsGroupedByZipCode <- as.data.frame(tree05CountsGroupedByZipCode)
+colnames(tree05CountsGroupedByZipCode) <- c("ZIPCODE", "value")
+pal05 <- colorNumeric(
+  palette = "Reds",
+  domain = tree05CountsGroupedByZipCode$value)
+
+
+
+nyc_boroughs <- readOGR("BoroughBoundaries.geojson","BoroughBoundaries")
+
+treeCountsGroupedByboroname <- tree_data %>% group_by(boroname) %>% tally()
+treeCountsGroupedByboroname <- as.data.frame(treeCountsGroupedByboroname)
+colnames(treeCountsGroupedByboroname) <- c("boro", "value")
+pal_boro <- colorNumeric(
+  palette = "Reds",
+  domain = treeCountsGroupedByboroname$value)
+
+tree05CountsGroupedByboroname <- tree05_data %>% group_by(boroname) %>% tally()
+tree05CountsGroupedByboroname <- as.data.frame(tree05CountsGroupedByboroname)
+levels(tree05CountsGroupedByboroname$boro)[levels(tree05CountsGroupedByboroname$boro) == "5"] <- "Staten Island"
+colnames(tree05CountsGroupedByboroname) <- c("boro1", "value","boro")
+tree05CountsGroupedByboroname <- tree05CountsGroupedByboroname %>% select(c("boro","value"))
+pal05_boro <- colorNumeric(
+  palette = "Reds",
+  domain = tree05CountsGroupedByboroname$value)
 
 
 
