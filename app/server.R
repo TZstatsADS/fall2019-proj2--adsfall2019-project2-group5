@@ -32,7 +32,8 @@ shinyServer(function(input, output) {
                     direction = "auto"),
                   group = "number_of_trees")%>%
       ## the legend of color
-      addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>% showGroup("number_of_trees")
+      addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>%
+      showGroup("number_of_trees") 
     ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("number_of_trees") %>% clearControls()}
   })
@@ -49,10 +50,11 @@ shinyServer(function(input, output) {
       addMarkers(data = spe(),group = "type",icon = list(iconUrl = "icon/tree.png",iconSize=c(15,15)))
   })
   
-  ## heatmap for problem: issue of color and controls
+  ## heatmap for problem: 
+  
   observeEvent(input$enable_heatmap,{
     
-    if("Root Problem" %in% input$enable_heatmap) leafletProxy("map") %>% 
+    if("Root Problem" %in% input$enable_heatmap) leafletProxy("map") %>% clearGroup("type") %>% 
       addPolygons(data = nyc_neighborhoods,
                   popup = ~ntaname,
                   stroke = T, weight=1,
@@ -69,7 +71,7 @@ shinyServer(function(input, output) {
     ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("root") %>% clearControls()}
     
-    if("Branch Problem" %in% input$enable_heatmap) leafletProxy("map") %>%
+    if("Branch Problem" %in% input$enable_heatmap) leafletProxy("map") %>% clearGroup("type") %>% 
       addPolygons(data = nyc_neighborhoods,
                   popup = ~ntaname,
                   stroke = T, weight=1,
@@ -86,10 +88,9 @@ shinyServer(function(input, output) {
     ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("branch") %>% clearControls()}
     
-    if("Trunk Problem" %in% input$enable_heatmap) leafletProxy("map")%>% 
+    if("Trunk Problem" %in% input$enable_heatmap) leafletProxy("map")%>% clearGroup("type") %>% 
       addPolygons(data = nyc_neighborhoods,
-                  popup = ~ntaname,
-                  stroke = T, weight=1,
+                  popup = ~ntaname,stroke = T, weight=1,
                   fillOpacity = 0.95,
                   color = ~pal_trunk(markers_trunk$value),
                   highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
@@ -119,28 +120,70 @@ shinyServer(function(input, output) {
   #By ZIPCODE:
   ## problem
   observeEvent(input$enable_markers, {
+    df_root <- problem %>% filter(root == 1) %>% 
+      select(c("problems","health","spc_common","steward","guards","sidewalk","zipcode","lat","lng")) %>%
+      mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)
+    df_branch <- problem %>% filter(branch == 1) %>% 
+      select(c("problems","health","spc_common","steward","guards","sidewalk","zipcode","lat","lng")) %>%
+      mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)
+    df_trunk <- problem %>% filter(trunk == 1) %>% 
+      select(c("problems","health","spc_common","steward","guards","sidewalk","zipcode","lat","lng")) %>%
+      mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)
     if("Root Problem" %in% input$enable_markers) leafletProxy("map",
-                                                              data = problem %>% filter(root == 1) %>% 
-                                                                select(zipcode,lat,lng) %>%
-                                                                mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)) %>% 
+                                                              data = df_root) %>% 
       addMarkers(lat = ~lat,lng = ~lng,
-                 group ="markers_root",popup = "root problem",
+                 group ="markers_root",popup = paste0("<strong>Zipcode: </strong>", 
+                                                      df_root$zip,
+                                                      "<br><strong>Species: </strong>", 
+                                                      df_root$spc_common,
+                                                      "<br><strong>Health: </strong>", 
+                                                      df_root$health,
+                                                      "<br><strong>Steward: </strong>", 
+                                                      df_root$steward,
+                                                      "<br><strong>Guards: </strong>", 
+                                                      df_root$guards,
+                                                      "<br><strong>Sidewalk: </strong>", 
+                                                      df_root$sidewalk,
+                                                      "<br><strong>Problems: </strong>", 
+                                                      df_root$problems),
                  icon = list(iconUrl = "icon/root.png",iconSize=c(15,15)))%>% showGroup("markers_root")
     else{leafletProxy("map") %>% hideGroup("markers_root")}
     
-    if("Branch Problem" %in% input$enable_markers) leafletProxy("map",data = problem %>% filter(branch == 1) %>% 
-                                                                  select(zipcode,lat,lng) %>%
-                                                                  mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)) %>% 
+    if("Branch Problem" %in% input$enable_markers) leafletProxy("map",data = df_branch) %>% 
       addMarkers(lat = ~lat,lng = ~lng,
-                 group ="markers_branch",popup = "branch problem",
+                 group ="markers_branch",popup = paste0("<strong>Zipcode: </strong>", 
+                                                        df_branch$zip,
+                                                        "<br><strong>Species: </strong>", 
+                                                        df_branch$spc_common,
+                                                        "<br><strong>Health: </strong>", 
+                                                        df_branch$health,
+                                                        "<br><strong>Steward: </strong>", 
+                                                        df_branch$steward,
+                                                        "<br><strong>Guards: </strong>", 
+                                                        df_branch$guards,
+                                                        "<br><strong>Sidewalk: </strong>", 
+                                                        df_branch$sidewalk,
+                                                        "<br><strong>Problems: </strong>", 
+                                                        df_branch$problems),
                  icon = list(iconUrl = "icon/branch.png",iconSize=c(15,15)))%>% showGroup("markers_branch")
     else{leafletProxy("map") %>% hideGroup("markers_branch")}
     
-    if("Trunk Problem" %in% input$enable_markers) leafletProxy("map",data = problem %>% filter(trunk == 1) %>% 
-                                                                 select(zipcode,lat,lng) %>%
-                                                                 mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)) %>% 
+    if("Trunk Problem" %in% input$enable_markers) leafletProxy("map",data = df_trunk) %>% 
       addMarkers(lat = ~lat,lng = ~lng,
-                 group ="markers_trunk",popup = "trunk problem",
+                 group ="markers_trunk",popup = paste0("<strong>Zipcode: </strong>", 
+                                                       df_trunk$zip,
+                                                       "<br><strong>Species: </strong>", 
+                                                       df_trunk$spc_common,
+                                                       "<br><strong>Health: </strong>", 
+                                                       df_trunk$health,
+                                                       "<br><strong>Steward: </strong>", 
+                                                       df_trunk$steward,
+                                                       "<br><strong>Guards: </strong>", 
+                                                       df_trunk$guards,
+                                                       "<br><strong>Sidewalk: </strong>", 
+                                                       df_trunk$sidewalk,
+                                                       "<br><strong>Problems: </strong>", 
+                                                       df_trunk$problems),
                  icon = list(iconUrl = "icon/trunk.png",iconSize=c(15,15)))%>% showGroup("markers_trunk")
     
     else{leafletProxy("map") %>% hideGroup("markers_trunk")}
@@ -159,7 +202,7 @@ shinyServer(function(input, output) {
     col1 = rainbow(nrow(a1))
     plot_ly(labels=a1[,1],values=a1[,2], type = "pie",
             marker=list(colors=col1),textinfo = "none") %>%
-      layout(title = paste("Species propotion"),showlegend=F,
+      layout(title = paste("Species proportion"),showlegend=F,
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })
@@ -170,7 +213,7 @@ shinyServer(function(input, output) {
     col1 = rainbow(nrow(a1))
     plot_ly(labels=a1[,1], values=a1[,2], type = "pie",
             marker=list(colors=col1)) %>%
-      layout(title = paste("Health propotion"),showlegend=F,
+      layout(title = paste("Health proportion"),showlegend=F,
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })
@@ -181,7 +224,7 @@ shinyServer(function(input, output) {
     col1 = rainbow(nrow(a1))
     plot_ly(labels=a1[,1], values=a1[,2], type = "pie",
             marker=list(colors=col1)) %>%
-      layout(title = paste("Guard propotion"),showlegend=F,
+      layout(title = paste("Guard proportion"),showlegend=F,
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })
@@ -192,7 +235,7 @@ shinyServer(function(input, output) {
     col1 = rainbow(nrow(a1))
     plot_ly(labels=a1[,1], values=a1[,2], type = "pie",
             marker=list(colors=col1)) %>%
-      layout(title = paste("Sidewalk propotion"),showlegend=F,
+      layout(title = paste("Sidewalk proportion"),showlegend=F,
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })

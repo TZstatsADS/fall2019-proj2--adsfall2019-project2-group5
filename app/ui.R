@@ -31,7 +31,7 @@ shinyUI(
                                   checkboxInput("click_heatmap","heat map",value = FALSE),
                                   # select the species
                                   selectInput("type", label = "Species of tree:",
-                                              choices = unique(data$spc),selected = NULL,multiple = FALSE
+                                              choices = append(as.character(unique(data$spc)),"None",0),selected = NULL,multiple = FALSE
                                   ),
                                   # check the problem
                                   radioButtons("enable_heatmap", "Tree problem heatmap:",
@@ -43,7 +43,7 @@ shinyUI(
                                   h4("By ZIPCODE"),
                                   # select the zipcode
                                   selectInput("zipcode", label = "Please select the ZIPCODE :", 
-                                              choices = sort(as.numeric(unique(tree_zip$zip))),selected = NULL,multiple = FALSE
+                                              choices =  c("None",sort(as.numeric(unique(tree_zip$zip)))),selected = NULL,multiple = FALSE
                                   ),
                                   h5("Pie Charts are shown on the right."),
                                   checkboxGroupInput("enable_markers", "Step 2 Add Markers for:",

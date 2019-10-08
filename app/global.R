@@ -16,7 +16,7 @@ colnames(tree)[39:40] <- c("lat","lng")
 # delete the unreasonable zipcde
 tree_data <- tree[tree$zipcode !=83,]
 # select the variables we may need and save it as tree_data
-tree_data <- tree_data %>% select(c("status","health","spc_common",
+tree_data <- tree_data %>% select(c("problems","status","health","spc_common",
                           "steward","guards","sidewalk",
                           "address","zipcode","zip_city",
                           "boroname","root_stone","root_grate","root_other",
@@ -56,10 +56,10 @@ tree_zip <- tree_data %>% select(zipcode) %>% mutate(zip = as.character(zipcode)
 
 # problem data set save it as problem
 problem <- tree_data %>% 
-  select(c("zipcode","root_stone","root_grate","root_other",
+  select(c("health","spc_common","steward","guards","sidewalk","zipcode","root_stone","root_grate","root_other",
            "trnk_wire","trnk_light","trnk_other",
            "brnch_ligh","brnch_shoe","brnch_othe",
-           "lat","lng")) %>% 
+           "lat","lng","problems")) %>% 
   mutate(root = ifelse(root_stone == "Yes",1,
                        ifelse(root_grate =="Yes",1,
                               ifelse(root_other =="Yes",1,0))),
@@ -99,6 +99,8 @@ pal_branch <- colorNumeric(
 pal_trunk <- colorNumeric(
   palette = "Purples",
   domain = markers_trunk$value)
+
+
 
 
 
