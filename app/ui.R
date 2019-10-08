@@ -114,7 +114,22 @@ shinyUI(
                      ),
                      
                      div(class="footer", "Applied Data Science")
-            )
+            ),
+           # 5. Next Steps / Future Ideas
+         tabPanel("Next Steps / Future Ideas",
+                  mainPanel
+                  (
+                    width = 12,
+                    h3("Predictive Model for Trees"),
+                    p("If, for a prior years tree data set, we can find the tree ID associated with a specific tree in the prior years and most recent year, we can track that trees health over time. If we have information on the tree, such as whether it was located on a sidewalk or whether it had branch/trunk/root problems, we may be able to make a predictive model to estimate which trees have a high likellihood of dying and thus prevent future deaths by taking the necessary precautions."),
+                    br(),
+                    h3("Analyzing Trees after Grouping By Similarities"),
+                    p("The tree data gives us information about what species each tree is from. We can use this information to create another column called 'Category'. In this column, we will put tree species in the same category if they are similar to each other based on certain criteria. This will require using the Internet and other resources to figure out which trees should be grouped together. After this is done, we can create a map that shows were trees within the same category are planted. This would allow for a more interesting and detailed map view.")
+
+                  ),
+                  # footer
+                  div(class = "footer","Applied Data Science")
+         )
         )
     )
 )
