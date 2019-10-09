@@ -16,11 +16,7 @@ shinyUI(
                   p("Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created a Shiny App to assist users to explore our findings in four main tabs: Map, Comparison, Future Ideas and Data."),
                   h4("-Map: Users can pinpoint any location in New York City by zipcode and choose problems and species of trees they interested. Then total tree numbers, species proportion, health proportion, guard condition and sidewalk condition will be presented on the right output section."),
                   h4("-Data: Both year 2015 and year 2005's data contain over 500000 trees' information we used to analyze and to apply algorithm."),
-                  h4("-Target User: For urban construction group or parks and recreation department to improve urban greening in the future."),
-                  h3("Interesting Facts:"),
-                  br(),
-                  p("-Tree species like american larch, black maple or eastern hemlock which normally grow up in wet weather have low occupancy in new york city.")
-                
+                  h4("-Target Users: For urban construction group or parks and recreation department to improve urban greening in the future.")            
                     
                     ),
                 # footer
