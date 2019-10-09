@@ -13,16 +13,15 @@ library(plotly)
 load("tree.RData")
 # change the name of latitute and longitute
 colnames(tree)[39:40] <- c("lat","lng")
-# delete the unreasonable zipcde
-tree_data <- tree[tree$zipcode !=83,]
+tree$zipcode[tree$zipcode ==83] <- "00083"
 # select the variables we may need and save it as tree_data
-tree_data <- tree_data %>% select(c("problems","status","health","spc_common",
+tree_data <- tree %>% select(c("problems","status","health","spc_common",
                           "steward","guards","sidewalk",
                           "address","zipcode","zip_city",
                           "boroname","root_stone","root_grate","root_other",
                           "trnk_wire","trnk_light","trnk_other",
                           "brnch_ligh","brnch_shoe","brnch_othe","lat","lng"))
-tree_data2 = tree_data %>% select(c("status","health","spc_common",
+tree_data2 = tree %>% select(c("status","health","spc_common",
                                     "steward","guards","sidewalk",
                                     "zipcode","zip_city",
                                     "boroname","lat","lng"))
@@ -151,5 +150,13 @@ nyc_boroughs$boro_name <- as.factor(nyc_boroughs$boro_name)
 nyc_boroughs@data <- left_join(nyc_boroughs@data,treeCountsGroupedByboroname,by = c("boro_name" = "boro"))
 nyc_boroughs@data <- left_join(nyc_boroughs@data,tree05CountsGroupedByboroname,by = c("boro_name" = "boro"))
 
+tree05_data$spc_common = tolower(tree05_data$spc_common)
 
 
+tt <- tree %>% filter(zipcode == "10024") %>% group_by(spc_common,boroname) %>% tally()
+plot_ly(labels = tt$spc_common,parents = tt$boroname, values = tt$n, type = "sunburst")
+
+tt2 <- tree %>% filter(boroname == "Manhattan") %>% 
+  group_by(spc_common,zipcode) %>% tally() %>%
+  filter(spc_common != "") %>% arrange(desc(n))
+p <- plot_ly(labels = tt2[1:30,"zipcode"],parents = tt2[1:30,"spc_common"], values = tt2[1:30,"n"], type = "sunburst")

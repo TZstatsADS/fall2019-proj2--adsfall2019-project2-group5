@@ -5,24 +5,30 @@ shinyServer(function(input, output,session) {
     m <- leaflet(nyc_zipcode) %>%
       addTiles() %>% 
       addProviderTiles("CartoDB.Positron") %>%
-      setView(-73.983,40.7639,zoom = 10) %>% 
-      addPolygons(popup = paste0("<strong>Zipcode: </strong>", 
-                                 nyc_zipcode$postalCode),
-                  fillColor = "gray", 
-                  fillOpacity = 1, 
-                  weight = 2, 
-                  stroke = T, 
-                  color = "green", 
-                  opacity = 1) 
+      setView(-73.983,40.7639,zoom = 10)
     
   })
+  
+  output$map1 <- renderLeaflet({
+    # default map, base layer
+    m <- leaflet() %>%
+      addTiles() %>% 
+      addProviderTiles("CartoDB.Positron") %>%
+      setView(-73.983,40.7639,zoom = 10) 
+  })
+  
+
+
   # Overview:
   ##checkbox for heatmap
   observeEvent(input$click_heatmap,{
     ## when the box is checked, show the heatmap 
     if(input$click_heatmap ==TRUE) leafletProxy("map")%>%
       addPolygons(data = nyc_zipcode,
-                  popup = ~postalCode,
+                  popup = paste0("<strong>Zipcode: </strong>", 
+                                 nyc_zipcode$postalCode,
+                                 "<br><strong>Number of Trees: </strong>",
+                                 nyc_zipcode$value.x),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
                   color = ~pal(nyc_zipcode$value.x),
@@ -58,7 +64,9 @@ shinyServer(function(input, output,session) {
     if("Root Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
       addPolygons(data = nyc_zipcode,
                   popup = paste0("<strong>Zipcode: </strong>", 
-                                 nyc_zipcode$postalCode),
+                                 nyc_zipcode$postalCode,
+                                 "<br><strong>Number of Trees having root problem: </strong>",
+                                 nyc_zipcode$value.root),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
                   color = ~pal_root(nyc_zipcode$value.root),
@@ -76,7 +84,9 @@ shinyServer(function(input, output,session) {
     if("Branch Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
       addPolygons(data = nyc_zipcode,
                   popup = paste0("<strong>Zipcode: </strong>", 
-                                 nyc_zipcode$postalCode),
+                                 nyc_zipcode$postalCode,
+                                 "<br><strong>Number of Trees having branch problem: </strong>",
+                                 nyc_zipcode$value.branch),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
                   color = ~pal_branch(nyc_zipcode$value.branch),
@@ -94,7 +104,9 @@ shinyServer(function(input, output,session) {
     if("Trunk Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
       addPolygons(data = nyc_zipcode,
                   popup = paste0("<strong>Zipcode: </strong>", 
-                                 nyc_zipcode$postalCode),
+                                 nyc_zipcode$postalCode,
+                                 "<br><strong>Number of Trees having trunk problem: </strong>",
+                                 nyc_zipcode$value.trunk),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
                   color = ~pal_trunk(nyc_zipcode$value.trunk),
@@ -139,8 +151,8 @@ shinyServer(function(input, output,session) {
     df_trunk <- problem %>% filter(trunk == 1) %>% 
       select(c("problems","health","spc_common","steward","guards","sidewalk","zipcode","lat","lng")) %>%
       mutate(zip = as.character(zipcode)) %>% filter(zip==input$zipcode)
-    if("Root Problem" %in% input$enable_markers) leafletProxy("map",
-                                                              data = df_root) %>% clearControls() %>% 
+    
+    if("Root Problem" %in% input$enable_markers) leafletProxy("map",data = df_branch) %>% clearControls() %>% 
       addMarkers(lat = ~lat,lng = ~lng,
                  group ="markers_root",popup = paste0("<strong>Zipcode: </strong>", 
                                                       df_root$zip,
@@ -155,10 +167,14 @@ shinyServer(function(input, output,session) {
                                                       "<br><strong>Sidewalk: </strong>", 
                                                       df_root$sidewalk,
                                                       "<br><strong>Problems: </strong>", 
-                                                      df_root$problems),
+                                                      df_root$problems,
+                                                      "<br><strong>Latitude: </strong>", 
+                                                      df_root$lat,
+                                                      "<br><strong>Longitude: </strong>", 
+                                                      df_root$lng),
                  icon = list(iconUrl = "icon/root.png",iconSize=c(15,15)))%>% 
       showGroup("markers_root")
-    else{leafletProxy("map") %>% hideGroup("markers_root")}
+    else{leafletProxy("map2") %>% hideGroup("markers_root")}
     
     if("Branch Problem" %in% input$enable_markers) leafletProxy("map",data = df_branch) %>% clearControls() %>% 
       addMarkers(lat = ~lat,lng = ~lng,
@@ -175,9 +191,13 @@ shinyServer(function(input, output,session) {
                                                         "<br><strong>Sidewalk: </strong>", 
                                                         df_branch$sidewalk,
                                                         "<br><strong>Problems: </strong>", 
-                                                        df_branch$problems),
+                                                        df_branch$problems,
+                                                        "<br><strong>Latitude: </strong>", 
+                                                        df_branch$lat,
+                                                        "<br><strong>Longitude: </strong>", 
+                                                        df_branch$lng),
                  icon = list(iconUrl = "icon/branch.png",iconSize=c(15,15)))%>% showGroup("markers_branch")
-    else{leafletProxy("map") %>% hideGroup("markers_branch")}
+    else{leafletProxy("map2") %>% hideGroup("markers_branch")}
     
     if("Trunk Problem" %in% input$enable_markers) leafletProxy("map",data = df_trunk) %>% clearControls() %>% 
       addMarkers(lat = ~lat,lng = ~lng,
@@ -194,7 +214,11 @@ shinyServer(function(input, output,session) {
                                                        "<br><strong>Sidewalk: </strong>", 
                                                        df_trunk$sidewalk,
                                                        "<br><strong>Problems: </strong>", 
-                                                       df_trunk$problems),
+                                                       df_trunk$problems,
+                                                       "<br><strong>Latitude: </strong>", 
+                                                       df_trunk$lat,
+                                                       "<br><strong>Longitude: </strong>", 
+                                                       df_trunk$lng),
                  icon = list(iconUrl = "icon/trunk.png",iconSize=c(15,15)))%>% showGroup("markers_trunk")
     
     else{leafletProxy("map") %>% hideGroup("markers_trunk")}
@@ -255,17 +279,9 @@ shinyServer(function(input, output,session) {
   
   
   # 3. comparison tab
-  output$map1 <- renderLeaflet({
-    # default map, base layer
-    m <- leaflet() %>%
-      addTiles() %>% 
-      addProviderTiles("CartoDB.Positron") %>%
-      setView(-73.983,40.7639,zoom = 10) 
-  })
-  
   observeEvent({input$enable_regions
     input$comparison_heatmap},{
-      if("Neighbourhoods" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1") %>% clearControls()  %>% 
+      if("Zipcodes" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1") %>% clearControls()  %>% 
         addPolygons(data = nyc_zipcode,
                     popup = paste0("<strong>Zipcode: </strong>", 
                                    nyc_zipcode$postalCode,
@@ -284,7 +300,7 @@ shinyServer(function(input, output,session) {
         addLegend(pal = pal05,group = "number_of_trees05", values = nyc_zipcode$value.y, opacity = 1)
      # else{leafletProxy("map1") %>% hideGroup("number_of_trees05") %>% clearControls()}
       
-      if("Neighbourhoods" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1") %>% clearControls()  %>% 
+      if("Zipcodes" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1") %>% clearControls()  %>% 
         addPolygons(data = nyc_zipcode,
                     popup = paste0("<strong>Zipcode: </strong>", 
                                     nyc_zipcode$postalCode,
@@ -342,7 +358,21 @@ shinyServer(function(input, output,session) {
       
     })
   
+  output$spc_pie1 = renderPlotly({
+    tt <- tree %>% filter(zipcode == input$zipcode2) %>% group_by(spc_common,boroname) %>% tally()
+    plot_ly(labels = tt$spc_common,parents = tt$boroname, values = tt$n, type = "sunburst") %>%
+      layout(title = paste("Species proportion in 2015"),showlegend=F,
+             xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
+             yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
+  })
   
+  output$spc_pie2 = renderPlotly({
+    tt <- tree05 %>% filter(zipcode == input$zipcode2) %>% group_by(spc_common,boroname) %>% tally()
+    plot_ly(labels = tt$spc_common,parents = tt$boroname, values = tt$n, type = "sunburst") %>%
+      layout(title = paste("Species proportion in 2005"),showlegend=F,
+             xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
+             yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
+  })
   
-  
+
 })

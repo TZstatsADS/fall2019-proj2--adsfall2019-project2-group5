@@ -7,8 +7,10 @@ shinyUI(
             tabPanel("Introduction",
                 mainPanel(
                   width = 12,
-                  h3("Background:"),
-                  p("Trees are vital. They give us oxygen, store carbon and give life to whole world's wildlife. People are attracted to live and work in surroundings. Companies benefit from a healthier and happier workforce if there are parks and trees nearby. Therefore, parks and trees would become an more vital component of urban life. People must respect them and protect them for the future."),
+                  h1("Project: 2015 NYC Street Trees Census"),
+                  h4("An RShiny app detecting tree species and problems in NYC"),
+                  h2("Background:"),
+                  p("Trees are vital. They give us oxygen, store carbon and give life to whole world's wildlife. People love to live and work in greens. Therefore, trees would become an more vital component of urban life."),
                   br(),
                   h3("Project Summary:"),
                   p("Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created a Shiny App to assist users to explore our findings in four main tabs: Map, Comparison, Future Ideas and Data."),
@@ -56,7 +58,7 @@ shinyUI(
                                   # select the zipcode
                                   h4("Step 1"),
                                   selectInput("zipcode", label = "Please select the ZIPCODE :", 
-                                              choices =  c("None",sort(as.numeric(unique(tree_zip$zip)))),selected = NULL,multiple = FALSE
+                                              choices =  c("None",sort(as.character(unique(tree_zip$zip)))),selected = NULL,multiple = FALSE
                                   ),
                                   h5("Pie Charts are shown on the right."),
                                   div(),
@@ -97,17 +99,28 @@ shinyUI(
                                        h3("Tree Coverage:"),
                                        h4(strong("Please select both Regions and Year.")),
                                        radioButtons("enable_regions", "Regions:",
-                                                          choices = c("Neighbourhoods","Boroughs"),
+                                                          choices = c("Zipcodes","Boroughs"),
                                                     selected = character(0)
                                        ),
                                        radioButtons("comparison_heatmap", "Year:",
                                                     choices = list("2005","2015"),
                                                     selected = character(0)
                                        )
-                                     
+                         ),
+                         absolutePanel(id = "controls", class = "panel panel-default", fixed= TRUE, draggable = TRUE,
+                                       top = 120, left = "auto", right = 20, bottom = "auto", width = 400, height = "auto",
+                                       #By Zipcode
+                                       h4("By ZIPCODE"),
+                                       #By Zipcode
+                                       selectInput("zipcode2", label = "Please select the ZIPCODE :", 
+                                                   choices =  c("None",sort(as.character(unique(tree_zip$zip)))),selected = NULL,multiple = FALSE
+                                       ),
+                                       p(textOutput("total1")),
+                                       plotlyOutput("spc_pie1", height="300"),
+                                       p(textOutput("total2")),
+                                       plotlyOutput("spc_pie2", height="300")
                          )
                      )       
-              
             ),
             # 5. Next Steps / Future Ideas
             tabPanel("Next Steps / Future Ideas",
