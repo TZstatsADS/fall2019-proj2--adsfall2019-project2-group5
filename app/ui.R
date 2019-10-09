@@ -5,10 +5,22 @@ shinyUI(
                    theme = "styles.css",
             # 1. Intro tab
             tabPanel("Introduction",
-                mainPanel(width = 12,
-                    h1("Hello World!")
-                                
-                            ),
+                mainPanel(
+                  width = 12,
+                  h3("Background:"),
+                  p("Trees are vital. They give us oxygen, store carbon and give life to whole world's wildlife. People are attracted to live and work in surroundings. Companies benefit from a healthier and happier workforce if there are parks and trees nearby. Therefore, parks and trees would become an more vital component of urban life. People must respect them and protect them for the future."),
+                  br(),
+                  h3("Project Summary:"),
+                  p("Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created a Shiny App to assist users to explore our findings in four main tabs: Map, Comparison, Future Ideas and Data."),
+                  h4("-Map: Users can pinpoint any location in New York City by zipcode and choose problems and species of trees they interested. Then total tree numbers, species proportion, health proportion, guard condition and sidewalk condition will be presented on the right output section."),
+                  h4("-Data: Both year 2015 and year 2005's data contain over 500000 trees' information we used to analyze and to apply algorithm."),
+                  h4("-Target User: For urban construction group or parks and recreation department to improve urban greening in the future."),
+                  h3("Interesting Facts:"),
+                  br(),
+                  p("-Tree species like american larch, black maple or eastern hemlock which normally grow up in wet weather have low occupancy in new york city.")
+                
+                    
+                    ),
                 # footer
                 div(class = "footer","Applied Data Science")
             ),
@@ -103,11 +115,10 @@ shinyUI(
                      (
                        width = 12,
                        h3("Predictive Model for Trees"),
-                       p("If, for a prior years tree data set, we can find the tree ID associated with a specific tree in the prior years and most recent year, we can track that trees health over time. If we have information on the tree, such as whether it was located on a sidewalk or whether it had branch/trunk/root problems, we may be able to make a predictive model to estimate which trees have a high likellihood of dying and thus prevent future deaths by taking the necessary precautions."),
+                       p("We can track a given tree ID or a specific tree's health condition through prior year tree dataset and recent year dataset. Moreover, as we have the information for that specific tree, for example: if it was located on a sidewalk or whether it had branch/trunk/root problem, we can make a predictive model to anticipate if this tree has a high possibility of dying. This model can help relevant departments or volunteer groups to take necessary precautions and to prevent future deaths."),
                        br(),
                        h3("Analyzing Trees after Grouping By Similarities"),
-                       p("The tree data gives us information about what species each tree is from. We can use this information to create another column called 'Category'. In this column, we will put tree species in the same category if they are similar to each other based on certain criteria. This will require using the Internet and other resources to figure out which trees should be grouped together. After this is done, we can create a map that shows were trees within the same category are planted. This would allow for a more interesting and detailed map view.")
-                       
+                       p(" The tree census datasets give us information about each tree's species. Then we can use this message to create another column 'Category'. For 'Category', we can put tree with similar features in the same category. But it would be hard to group trees since it require a vast knowledge in botany.  However, If we can resolve this issue, we would create a new map showing trees with same category and it would develop another interesting and detailed map view.")
                      ),
                      # footer
                      div(class = "footer","Applied Data Science")
