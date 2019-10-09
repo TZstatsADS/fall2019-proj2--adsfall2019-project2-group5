@@ -33,7 +33,6 @@ data$health = tree$health
 data$guard = tree$guards
 data$side = tree$sidewalk
 colnames(data)[4:5] = c("lat","lng")
-data = data[data$zip != 83,]
 e = data$spc[631]
 data = data[data$spc != e,]   ## remove empty values
 data = data[order(data$spc),] ## order the spc names  
@@ -41,9 +40,8 @@ data = data[order(data$spc),] ## order the spc names
 
 # Base map
 ## Shapefiles for adding polygons of regions in NYC
-nyc_neighborhoods <- readOGR("NYCNeighborhood.geojson","NYCNeighborhood")
-
-
+nyc_zipcode <- readOGR("nyc-zip-code-tabulation-areas-polygons.geojson","nyc-zip-code-tabulation-areas-polygons")
+nyc_zipcode$postalCode <- as.factor(nyc_zipcode$postalCode)
 # Heatmap: Tree coverage dataset 
 treeCountsGroupedByZipCode <- tree_data %>% group_by(zipcode) %>% tally()
 treeCountsGroupedByZipCode <- as.data.frame(treeCountsGroupedByZipCode)
@@ -74,31 +72,41 @@ problem <- tree_data %>%
 markers_root <- problem %>% filter(root == 1) %>% 
   select(zipcode,lat,lng) %>%
   mutate(zip = as.character(zipcode)) %>% 
-  group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+  group_by(zip) %>% summarise(value.root = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+
+markers_root$zip <- as.factor(markers_root$zip)
 # problem: trunk data
 markers_trunk <- problem %>% filter(trunk == 1) %>% 
   select(zipcode,lat,lng) %>%
   mutate(zip = as.character(zipcode)) %>% 
-  group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+  group_by(zip) %>% summarise(value.trunk = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+
+markers_trunk$zip <- as.factor(markers_trunk$zip)
 # problem: branch data
 markers_branch <- problem %>% filter(branch == 1) %>% 
   select(zipcode,lat,lng) %>%
   mutate(zip = as.character(zipcode)) %>% 
-  group_by(zip) %>% summarise(value = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+  group_by(zip) %>% summarise(value.branch = n()) %>% left_join(zipcode) %>% select(-c("city","state"))
+
+markers_branch$zip <- as.factor(markers_branch$zip)
+
+nyc_zipcode@data <- left_join(nyc_zipcode@data,markers_root,by = c("postalCode" = "zip"))
+nyc_zipcode@data <- left_join(nyc_zipcode@data,markers_trunk,by = c("postalCode" = "zip"))
+nyc_zipcode@data <- left_join(nyc_zipcode@data,markers_branch,by = c("postalCode" = "zip"))
 
 # Heatmap: for coloring
 pal <- colorNumeric(
-  palette = "Reds",
-  domain = treeCountsGroupedByZipCode$value)
+  palette = "Greens",
+  domain = nyc_zipcode$value.x)
 pal_root <- colorNumeric(
   palette = "Blues",
-  domain = markers_root$value)
+  domain = nyc_zipcode$value.root)
 pal_branch <- colorNumeric(
   palette = "Oranges",
-  domain = markers_branch$value)
+  domain = nyc_zipcode$value.branch)
 pal_trunk <- colorNumeric(
   palette = "Purples",
-  domain = markers_trunk$value)
+  domain = nyc_zipcode$value.trunk)
 
 
 load("tree05.RData")
@@ -109,8 +117,15 @@ tree05CountsGroupedByZipCode <- tree05_data %>% group_by(zipcode) %>% tally()
 tree05CountsGroupedByZipCode <- as.data.frame(tree05CountsGroupedByZipCode)
 colnames(tree05CountsGroupedByZipCode) <- c("ZIPCODE", "value")
 pal05 <- colorNumeric(
-  palette = "Reds",
-  domain = tree05CountsGroupedByZipCode$value)
+  palette = "Greens",
+  domain = nyc_zipcode$value.y)
+
+treeCountsGroupedByZipCode$ZIPCODE <- as.factor(treeCountsGroupedByZipCode$ZIPCODE)
+tree05CountsGroupedByZipCode$ZIPCODE <- as.factor(tree05CountsGroupedByZipCode$ZIPCODE)
+
+nyc_zipcode$postalCode <- as.factor(nyc_zipcode$postalCode)
+nyc_zipcode@data <- left_join(nyc_zipcode@data,treeCountsGroupedByZipCode,by = c("postalCode" = "ZIPCODE"))
+nyc_zipcode@data<- left_join(nyc_zipcode@data,tree05CountsGroupedByZipCode,by = c("postalCode" = "ZIPCODE"))
 
 
 
@@ -118,11 +133,10 @@ nyc_boroughs <- readOGR("BoroughBoundaries.geojson","BoroughBoundaries")
 
 treeCountsGroupedByboroname <- tree_data %>% group_by(boroname) %>% tally()
 treeCountsGroupedByboroname <- as.data.frame(treeCountsGroupedByboroname)
-
 colnames(treeCountsGroupedByboroname) <- c("boro", "value")
 pal_boro <- colorNumeric(
-  palette = "Reds",
-  domain = treeCountsGroupedByboroname$value)
+  palette = "Greens",
+  domain = nyc_boroughs$value.x)
 
 tree05CountsGroupedByboroname <- tree05_data %>% group_by(boroname) %>% tally()
 tree05CountsGroupedByboroname <- as.data.frame(tree05CountsGroupedByboroname)
@@ -130,10 +144,12 @@ levels(tree05CountsGroupedByboroname$boro)[levels(tree05CountsGroupedByboroname$
 colnames(tree05CountsGroupedByboroname) <- c("boro1", "value","boro")
 tree05CountsGroupedByboroname <- tree05CountsGroupedByboroname %>% select(c("boro","value"))
 pal05_boro <- colorNumeric(
-  palette = "Reds",
-  domain = tree05CountsGroupedByboroname$value)
+  palette = "Greens",
+  domain = nyc_boroughs$value.y)
 
-
+nyc_boroughs$boro_name <- as.factor(nyc_boroughs$boro_name)
+nyc_boroughs@data <- left_join(nyc_boroughs@data,treeCountsGroupedByboroname,by = c("boro_name" = "boro"))
+nyc_boroughs@data <- left_join(nyc_boroughs@data,tree05CountsGroupedByboroname,by = c("boro_name" = "boro"))
 
 
 

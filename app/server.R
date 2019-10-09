@@ -2,11 +2,12 @@ shinyServer(function(input, output,session) {
   # 2. map tab
   output$map <- renderLeaflet({
     # default map, base layer
-    m <- leaflet(nyc_neighborhoods) %>%
+    m <- leaflet(nyc_zipcode) %>%
       addTiles() %>% 
       addProviderTiles("CartoDB.Positron") %>%
       setView(-73.983,40.7639,zoom = 10) %>% 
-      addPolygons(popup = ~ntaname,
+      addPolygons(popup = paste0("<strong>Zipcode: </strong>", 
+                                 nyc_zipcode$postalCode),
                   fillColor = "gray", 
                   fillOpacity = 1, 
                   weight = 2, 
@@ -20,11 +21,11 @@ shinyServer(function(input, output,session) {
   observeEvent(input$click_heatmap,{
     ## when the box is checked, show the heatmap 
     if(input$click_heatmap ==TRUE) leafletProxy("map")%>%
-      addPolygons(data = nyc_neighborhoods,
-                  popup = ~ntaname,
+      addPolygons(data = nyc_zipcode,
+                  popup = ~postalCode,
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
-                  color = ~pal(treeCountsGroupedByZipCode$value),
+                  color = ~pal(nyc_zipcode$value.x),
                   highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                   labelOptions = labelOptions(
                     style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -32,7 +33,7 @@ shinyServer(function(input, output,session) {
                     direction = "auto"),
                   group = "number_of_trees")%>%
       ## the legend of color
-      addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) %>%
+      addLegend(pal = pal,group = "number_of_trees", values = nyc_zipcode$value.x, opacity = 1) %>%
       showGroup("number_of_trees") 
     ## when the box is unchecked, show the base map
     else{leafletProxy("map") %>% hideGroup("number_of_trees") %>% clearControls()}
@@ -55,11 +56,12 @@ shinyServer(function(input, output,session) {
   observeEvent(input$enable_heatmap,{
     
     if("Root Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
-      addPolygons(data = nyc_neighborhoods,
-                  popup = ~ntaname,
+      addPolygons(data = nyc_zipcode,
+                  popup = paste0("<strong>Zipcode: </strong>", 
+                                 nyc_zipcode$postalCode),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
-                  color = ~pal_root(markers_root$value),
+                  color = ~pal_root(nyc_zipcode$value.root),
                   highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                   labelOptions = labelOptions(
                     style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -67,16 +69,17 @@ shinyServer(function(input, output,session) {
                     direction = "auto"),
                   group = "root")%>%
       ## the legend of color
-      showGroup("root") %>% addLegend(pal = pal_root,group = "root", values = markers_root$value, opacity = 1)}
+      showGroup("root") %>% addLegend(pal = pal_root,group = "root", values = nyc_zipcode$value.root, opacity = 1)}
     # ## when the box is unchecked, show the base map
     # else{leafletProxy("map") %>% hideGroup("root") %>% clearControls()}
     
     if("Branch Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
-      addPolygons(data = nyc_neighborhoods,
-                  popup = ~ntaname,
+      addPolygons(data = nyc_zipcode,
+                  popup = paste0("<strong>Zipcode: </strong>", 
+                                 nyc_zipcode$postalCode),
                   stroke = T, weight=1,
                   fillOpacity = 0.95,
-                  color = ~pal_branch(markers_branch$value),
+                  color = ~pal_branch(nyc_zipcode$value.branch),
                   highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                   labelOptions = labelOptions(
                     style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -84,15 +87,17 @@ shinyServer(function(input, output,session) {
                     direction = "auto"),
                   group = "branch")%>%
       ## the legend of color
-      showGroup("branch") %>%  addLegend(pal = pal_branch,group = "branch", values = markers_branch$value, opacity = 1)}
+      showGroup("branch") %>%  addLegend(pal = pal_branch,group = "branch", values = nyc_zipcode$value.branch, opacity = 1)}
     # ## when the box is unchecked, show the base map
     # else{leafletProxy("map") %>% hideGroup("branch") %>% clearControls()}
     
     if("Trunk Problem" %in% input$enable_heatmap) {leafletProxy("map") %>% clearGroup("type") %>% clearControls() %>% 
-      addPolygons(data = nyc_neighborhoods,
-                  popup = ~ntaname,stroke = T, weight=1,
+      addPolygons(data = nyc_zipcode,
+                  popup = paste0("<strong>Zipcode: </strong>", 
+                                 nyc_zipcode$postalCode),
+                  stroke = T, weight=1,
                   fillOpacity = 0.95,
-                  color = ~pal_trunk(markers_trunk$value),
+                  color = ~pal_trunk(nyc_zipcode$value.trunk),
                   highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                   labelOptions = labelOptions(
                     style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -100,7 +105,7 @@ shinyServer(function(input, output,session) {
                     direction = "auto"),
                   group = "trunk")%>%
       ## the legend of color
-      showGroup("trunk") %>%  addLegend(pal = pal_trunk,group = "trunk", values = markers_trunk$value, opacity = 1)}
+      showGroup("trunk") %>%  addLegend(pal = pal_trunk,group = "trunk", values = nyc_zipcode$value.trunk, opacity = 1)}
     # ## when the box is unchecked, show the base map
     # else{leafletProxy("map") %>% hideGroup("trunk") %>% clearControls()}
   })
@@ -258,11 +263,14 @@ shinyServer(function(input, output,session) {
   observeEvent({input$enable_regions
     input$comparison_heatmap},{
       if("Neighbourhoods" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
-        addPolygons(data = nyc_neighborhoods,
-                    popup = ~ntaname,
+        addPolygons(data = nyc_zipcode,
+                    popup = paste0("<strong>Zipcode: </strong>", 
+                                   nyc_zipcode$postalCode,
+                                   "<br><strong>Number of Trees:",
+                                   nyc_zipcode$value.y),
                     stroke = T, weight=1,
                     fillOpacity = 0.95,
-                    color = ~pal05(tree05CountsGroupedByZipCode$value),
+                    color = ~pal05(nyc_zipcode$value.y),
                     highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                     labelOptions = labelOptions(
                       style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -270,12 +278,15 @@ shinyServer(function(input, output,session) {
                       direction = "auto"),
                     group = "number_of_trees05")%>%
         showGroup("number_of_trees05") %>% 
-        addLegend(pal = pal05,group = "number_of_trees05", values = tree05CountsGroupedByZipCode$value, opacity = 1)
+        addLegend(pal = pal05,group = "number_of_trees05", values = nyc_zipcode$value.y, opacity = 1)
      # else{leafletProxy("map1") %>% hideGroup("number_of_trees05") %>% clearControls()}
       
       if("Neighbourhoods" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
-        addPolygons(data = nyc_neighborhoods,
-                    popup = ~ntaname,
+        addPolygons(data = nyc_zipcode,
+                    popup = paste0("<strong>Zipcode: </strong>", 
+                                    nyc_zipcode$postalCode,
+                                    "<br><strong>Number of Trees:",
+                                    nyc_zipcode$value.x),
                     stroke = T, weight=1,
                     fillOpacity = 0.95,
                     color = ~pal(treeCountsGroupedByZipCode$value),
@@ -286,15 +297,17 @@ shinyServer(function(input, output,session) {
                       direction = "auto"),
                     group = "number_of_trees")%>%
         showGroup("number_of_trees") %>% 
-        addLegend(pal = pal,group = "number_of_trees", values = treeCountsGroupedByZipCode$value, opacity = 1) 
+        addLegend(pal = pal,group = "number_of_trees", values = nyc_zipcode$value.x, opacity = 1) 
       #else{leafletProxy("map1") %>% hideGroup("number_of_trees") %>% clearControls()}
       
       if("Boroughs" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
-        addPolygons(data = nyc_boroughs,
-                    popup = ~boro_name,
+        addPolygons(data = nyc_boroughs,popup = paste0("<strong>Borough: </strong>", 
+                                                       nyc_boroughs$boro_name,
+                                                       "<br><strong>Numbers of Trees: </strong>", 
+                                                       nyc_boroughs$value.y),
                     stroke = T, weight=1,
                     fillOpacity = 0.95,
-                    color = ~pal05_boro(tree05CountsGroupedByboroname$value),
+                    color = ~pal05_boro(nyc_boroughs$value.y),
                     highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                     labelOptions = labelOptions(
                       style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -302,15 +315,18 @@ shinyServer(function(input, output,session) {
                       direction = "auto"),
                     group = "number_of_trees05_boro")%>%
         showGroup("number_of_trees05_boro") %>% 
-        addLegend(pal = pal05_boro,group = "number_of_trees05_boro", values = tree05CountsGroupedByboroname$value, opacity = 1)
+        addLegend(pal = pal05_boro,group = "number_of_trees05_boro", values = nyc_boroughs$value.y, opacity = 1)
      # else{leafletProxy("map1") %>% hideGroup("number_of_trees05_boro") %>% clearControls()}
       
       if("Boroughs" %in% input$enable_regions & "2015" %in% input$comparison_heatmap) leafletProxy("map1")  %>% 
         addPolygons(data = nyc_boroughs,
-                    popup = ~boro_name,
+                    popup = paste0("<strong>Borough: </strong>", 
+                                           nyc_boroughs$boro_name,
+                                           "<br><strong>Numbers of Trees: </strong>", 
+                                           nyc_boroughs$value.x),
                     stroke = T, weight=1,
                     fillOpacity = 0.95,
-                    color = ~pal_boro(treeCountsGroupedByboroname$value),
+                    color = ~pal_boro(nyc_boroughs$value.x),
                     highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                     labelOptions = labelOptions(
                       style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -318,7 +334,7 @@ shinyServer(function(input, output,session) {
                       direction = "auto"),
                     group = "number_of_trees_boro")%>%
         showGroup("number_of_trees_boro") %>% 
-        addLegend(pal = pal_boro,group = "number_of_trees_boro", values = treeCountsGroupedByboroname$value, opacity = 1) 
+        addLegend(pal = pal_boro,group = "number_of_trees_boro", values = nyc_boroughs$value.x, opacity = 1) 
       #else{leafletProxy("map1") %>% hideGroup("number_of_trees_boro") %>% clearControls()}
       
     })
