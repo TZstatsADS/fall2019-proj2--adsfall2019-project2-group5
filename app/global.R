@@ -118,6 +118,7 @@ nyc_boroughs <- readOGR("BoroughBoundaries.geojson","BoroughBoundaries")
 
 treeCountsGroupedByboroname <- tree_data %>% group_by(boroname) %>% tally()
 treeCountsGroupedByboroname <- as.data.frame(treeCountsGroupedByboroname)
+
 colnames(treeCountsGroupedByboroname) <- c("boro", "value")
 pal_boro <- colorNumeric(
   palette = "Reds",
