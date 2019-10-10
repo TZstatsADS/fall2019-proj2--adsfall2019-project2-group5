@@ -18,8 +18,11 @@ The datasets our group used are '2015 Street Tree Census - Tree Data' from open 
 
 + **Plan**: 
 -Obtain datasets we need 
+
 -Select features we interest that can show comparisions between different zipcode
+
 -Process data and visualize data
+
 -Update the code to our shiny app we need
 
 + **Project summary** :
