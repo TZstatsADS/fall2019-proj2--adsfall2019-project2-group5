@@ -28,7 +28,6 @@ And'2005 Street Tree Census' (https://data.cityofnewyork.us/Environment/2005-Str
 + -Update the code to our shiny app we need
 
 + **Project summary** :
-
 Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created an app to assist users to explore in four main tabs: Maps, comparison,future ideas and data. 
 Specifically,Users can pinpoint any location in New York City by zipcode and choose problems and species of trees they interested via our map. Then total tree numbers, species proportion, health proportion, guard condition and sidewalk condition will be presented on the right output section.
 
