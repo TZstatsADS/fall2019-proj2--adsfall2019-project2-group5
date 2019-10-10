@@ -42,6 +42,7 @@ Server-Introduction tab: Nyu Chai
 Server-Map tab: Feichi Gu(spicies), Jess Mathew(heatmaps), Zian Zhou(problems)
 Server-Comparison tab: Feichi Gu(spicies), Jess Mathew(heatmaps), Zian Zhou(maps)
 Debug help:  Jess Mathew
+Next Steps tab: Jess Mathew
 Presentation: Zian Zhou
 Github Readme: Nyu Chai
 Github arrangement: Zian Zhou
