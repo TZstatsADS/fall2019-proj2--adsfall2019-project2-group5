@@ -32,6 +32,8 @@ Our project analyzes and visualizes street trees information regarding health an
 Specifically,Users can pinpoint any location in New York City by zipcode and choose problems and species of trees they interested via our map. Then total tree numbers, species proportion, health proportion, guard condition and sidewalk condition will be presented on the right output section.
 
 
+### [App Link](https://feichigu.shinyapps.io/proj2-2019-group5-tree/)
+
 + **Contribution statement**: 
 Data acquisition and manipulation: Everyone 
 Data integration(Acquitted data into one csv): Feichi Gu
