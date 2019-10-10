@@ -308,7 +308,7 @@ shinyServer(function(input, output,session) {
                                     nyc_zipcode$value.x),
                     stroke = T, weight=1,
                     fillOpacity = 0.95,
-                    color = ~pal(treeCountsGroupedByZipCode$value),
+                    color = ~pal_boro(nyc_zipcode$value.x),
                     highlightOptions = highlightOptions(color='#ff0000', opacity = 0.5, weight = 4, fillOpacity = 0.9,bringToFront = TRUE),
                     labelOptions = labelOptions(
                       style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -316,7 +316,7 @@ shinyServer(function(input, output,session) {
                       direction = "auto"),
                     group = "number_of_trees")%>%
         showGroup("number_of_trees") %>% 
-        addLegend(pal = pal,group = "number_of_trees", values = nyc_zipcode$value.x, opacity = 1) 
+        addLegend(pal = pal_boro,group = "number_of_trees", values = nyc_zipcode$value.x, opacity = 1) 
       #else{leafletProxy("map1") %>% hideGroup("number_of_trees") %>% clearControls()}
       
       if("Boroughs" %in% input$enable_regions & "2005" %in% input$comparison_heatmap) leafletProxy("map1") %>% clearControls()  %>% 
@@ -373,6 +373,4 @@ shinyServer(function(input, output,session) {
              xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
              yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
   })
-  
-
 })
