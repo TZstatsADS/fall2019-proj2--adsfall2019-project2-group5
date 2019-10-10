@@ -32,7 +32,18 @@ Our project analyzes and visualizes street trees information regarding health an
 Specifically,Users can pinpoint any location in New York City by zipcode and choose problems and species of trees they interested via our map. Then total tree numbers, species proportion, health proportion, guard condition and sidewalk condition will be presented on the right output section.
 
 
-+ **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
++ **Contribution statement**: 
+Data acquisition and manipulation: Everyone 
+Data integration(Acquitted data into one csv): Feichi Gu
+UI Design: Feichi Gu, Jess Mathew, Zian Zhou
+Server-Introduction tab: Nyu Chai
+Server-Map tab: Feichi Gu(spicies), Jess Mathew(heatmaps), Zian Zhou(problems)
+Server-Comparison tab: Feichi Gu(spicies), Jess Mathew(heatmaps), Zian Zhou(maps)
+Debug help:  Jess Mathew
+Presentation: Zian Zhou
+Github Readme: Nyu Chai
+Github arrangement: Zian Zhou
+
 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
