@@ -1,4 +1,4 @@
-## NYC Street Trees information App
+## NYC Street Trees Information App
 ![screenshot](doc/nyc-street-trees.jpg)
 
 + Term: Fall 2019 Team #5
@@ -17,6 +17,7 @@ The datasets our group used are '2015 Street Tree Census - Tree Data' from open 
 (https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35). And'2005 Street Tree Census' (https://data.cityofnewyork.us/Environment/2005-Street-Tree-Census/29bw-z7pjThis) Those datasets include tree species, diameter and perception of health.
 
 + **Plan**: 
+
 -Obtain datasets we need 
 
 -Select features we interest that can show comparisions between different zipcode
