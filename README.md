@@ -18,13 +18,13 @@ The datasets our group used are '2015 Street Tree Census - Tree Data' from open 
 
 + **Plan**: 
 
--Obtain datasets we need 
++ -Obtain datasets we need 
 
--Select features we interest that can show comparisions between different zipcode
++ -Select features we interest that can show comparisions between different zipcode
 
--Process data and visualize data
++ -Process data and visualize data
 
--Update the code to our shiny app we need
++ -Update the code to our shiny app we need
 
 + **Project summary** :
 Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created an app to assist users to explore in four main tabs: Maps, comparison,future ideas and data. 
