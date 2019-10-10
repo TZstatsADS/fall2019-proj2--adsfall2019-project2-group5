@@ -18,7 +18,7 @@ The dataset our group used is '2015 Street Tree Census - Tree Data' from open NY
 (https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35). This data includes tree species, diameter and perception of health.
 
 + **Project summary** :
-In this project, we analyzed tree's species, status, health, condition, guards types, sidewalk conditions by different zipcode and zip city. Using this method, we can see which area's trees has better condition or if sidewalk damage would affect trees to some extent....
+Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created a Shiny App to assist users to explore, for example: we can see which area's trees has better condition or if sidewalk damage would affect trees to some extent....
 
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
