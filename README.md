@@ -3,7 +3,6 @@
 
 + Term: Fall 2019 Team #5
 
-
 + Team members:
 	+ Chai, Nyu @nc2774
 	+ Gu, Feichi @feichigu
@@ -17,8 +16,15 @@ Trees are vital. They give us oxygen, store carbon and give life to whole world'
 The dataset our group used is '2015 Street Tree Census - Tree Data' from open NYC
 (https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/pi5s-9p35). This data includes tree species, diameter and perception of health.
 
++ **Plan**: 
+-Obtain datasets we need 
+-Select features we interest that can show comparisions between different zipcode
+-Process data and visualize data
+-Update the code to our shiny app we need
+
 + **Project summary** :
-Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created a Shiny App to assist users to explore, for example: we can see which area's trees has better condition or if sidewalk damage would affect trees to some extent....
+Our project analyzes and visualizes street trees information regarding health and illness conditions for different species of trees in New York City. The tree data were obtained from NYC Open Data portal. Our group also compared street tree's distribution in NYC betweem year 2005 and year 2015.We created an app to assist users to explore in four main tabs: Maps, comparison,future ideas and data. 
+Specifically,our 
 
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
